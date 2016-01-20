@@ -1,0 +1,47 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.glyphicon-thumbs-up { 
+	cursor:pointer 
+}
+
+.glyphicon-thumbs-down { 
+	cursor:pointer 
+}
+
+body {
+	position: relative;
+	padding-bottom: 5rem;
+}
+
+.navbar {
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+
+.posts {
+	margin-bottom: 6rem
+}
+
+.head {
+	background: url("../img/head-bg.jpg") no-repeat center center;
+	background-size: cover;
+	height: 700px;
+	text-align: center;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.head h1 {
+	padding: 0;
+	margin: 0;
+}
+
+.form {
+	margin-bottom: 6rem;
+}

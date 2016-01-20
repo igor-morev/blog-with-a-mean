@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Блог журналистов</title>
+	
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<script src="/bower_components/angular/angular.min.js"></script>
+	<script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="/javascripts/angularApp.js"></script>
+
+	<link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body ng-app="flapperNews">
+	<nav class="navbar navbar-default pull-right" ng-controller="NavCtrl">
+		<ul class="nav navbar-nav">
+			<li ng-show="isLoggedIn()"><a href="">{{currentUser()}}</a></li>
+			<li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Выйти</a></li>
+			<li ng-hide="isLoggedIn()"><a href="#/login">Войти</a></li>
+			<li ng-hide="isLoggedIn()"><a href="#/register">Зарегистрироваться</a></li>
+		</ul>
+	</nav>
+	<div class="jumbotron head">
+		<h1>Блог журналистов</h1>
+	</div>
+	<div class="container">
+		<ui-view></ui-view>
+	</div>
+</body>
+
+<script type="text/ng-template" id="/index.html">
+	<div ng-hide="isLoggedIn()">
+	  	<h3>Вам нужно <a href="#/login">Войти</a> или <a href="#/register">Зарегистрироваться</a>, чтобы добавлять статьи</h3>
+	</div>
+	<div class="row posts">
+		<div class="col-md-12" ng-repeat="post in posts | orderBy: '-upvotes'">
+			<h3>
+				<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+				{{post.upvotes}}
+				<span class="glyphicon glyphicon-thumbs-down" ng-click="decrementUpvotes(post)"></span>
+				<a ng-show="post.link" href="{{post.link}}">
+					{{post.title}}
+				</a>
+				<span ng-hide="post.link">
+					{{post.title}}
+				</span>
+				<span ng-show="post.author">
+			  		Автор <a>{{post.author}}</a> |
+				</span>	
+				<span>
+					<a href="#/posts/{{post._id}}">Комментариев:</a> {{post.comments.length}}
+				</span>
+			</h3>
+		</div>
+	</div>
+	<div class="row form" ng-show="isLoggedIn()">
+		<h2 class="col-md-12">Добавить новую статью</h2>
+		<form ng-submit="addPost()">
+			<div class="form-group col-md-6">
+				<input class="form-control" type="text" placeholder="title" ng-model="title" required>
+			</div>
+			<div class="form-group col-md-6">
+				<input class="form-control" type="text" placeholder="link" ng-model="link">
+			</div>
+			<div class="form-group col-md-12">
+				<button class="btn btn-primary" type="submit">Post</button>
+			</div>
+		</form>
+	</div>
+</script>
+
+<script type="text/ng-template" id="/posts.html">
+	<h3>
+		{{post.title}}
+	</h3>
+	<div ng-repeat="comment in post.comments | orderBy: '-upvotes'">
+		<span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(comment)"></span>
+		{{comment.upvotes}}
+		<span class="glyphicon glyphicon-thumbs-down" ng-click="decrementUpvotes(comment)"></span>
+		 - Написал {{comment.author}}
+		<span>
+			{{comment.body}}
+		</span>
+	</div>
+	<form ng-submit="addComment()" ng-show="isLoggedIn()">
+		<h3>Добавьте новый комментарий</h3>
+		<div class="row">
+			<div class="form-group col-md-6">
+		      	<input type="text" class="form-control" placeholder="Комментарий" ng-model="body" required>
+		    </div>
+		    <div class="form-group col-md-6">
+				<input type="text" class="form-control" placeholder="Ваше имя" ng-model="author">
+			</div>
+			<div class="form-group col-md-12">
+				<button class="btn btn-primary" type="submit">Post</button>
+			</div>
+		</row>
+	</form>
+	<div ng-hide="isLoggedIn()">
+	  	<h3>Вам нужно <a href="/login">Войти</a> или <a href="/register">Зарегистрироваться</a>, чтобы оставлять комментарии</h3>
+	</div>
+</script>
+
+<script type="text/ng-template" id="/register.html">
+	<div ng-show="error" class="alert alert-danger row">
+		<span>{{error.message}}</span>
+	</div>
+	<form ng-submit="register()">
+		<h3>Зарегистрироваться</h3>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Username" ng-model="user.username">
+		</div>
+		<div class="form-group">
+			<input type="password" class="form-control" placeholder="Password" ng-model="user.password">
+		</div>
+		<button type="submit" class="btn btn-primary">Отправить</button>
+	</form>
+</script>
+<script type="text/ng-template" id="/login.html">
+	<div ng-show="error" class="alert alert-danger row">
+		<span>{{error.message}}</span>
+	</div>
+	<form ng-submit="logIn()">
+		<h3>Войти</h3>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Username" ng-model="user.username">
+		</div>
+		<div class="form-group">
+			<input type="password" class="form-control" placeholder="Password" ng-model="user.password">
+		</div>
+		<button type="submit" class="btn btn-primary">Отправить</button>
+	</form>
+</script>
+
+</html>
