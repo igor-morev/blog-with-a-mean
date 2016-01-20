@@ -4,6 +4,6 @@ Hi, friends!. It's a simple blog that workes with MongoDB, Express, Angular and,
 
 To testing project you should:
 
-+ type `npm install` in command line for instaling all npm modules
-+ then type `npm start`
-+ Enjoy :)
+1. type `npm install` in command line for instaling all npm modules
+2. then type `npm start`
+3. Enjoy :)
